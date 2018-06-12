@@ -18,6 +18,9 @@ Route::get('/', function () {
 Route::get('/saveLesson', function () {
     
 });
+Route::get('/updateLesson', function () {
+    
+});
 
 Route::get('/getLesson', function () {
     $lesson = DB::table("lesson")->get();
@@ -28,4 +31,5 @@ Route::get('/getSingleLesson/{lesson}', function ($id) {
     $lesson = DB::table("lesson")->find($id);
     echo  json_encode($lesson);
 });
+
 
