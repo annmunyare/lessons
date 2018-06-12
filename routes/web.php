@@ -21,6 +21,12 @@ Route::get('/saveLesson', function () {
 Route::get('/updateLesson', function () {
     
 });
+Route::get('/deleteLesson/{id}', function ($id) {
+   DB::table("lesson")->where('id', $id)->delete();
+   $lesson = DB::table("lesson")->get();
+   echo $lesson;
+});
+
 
 Route::get('/getLesson', function () {
     $lesson = DB::table("lesson")->get();

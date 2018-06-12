@@ -76,7 +76,7 @@
             tableData+= "<td>" + responseObj[tData].description +"</td>";
             tableData+= "<td> <a href = '#' onclick ='showLesson("+responseObj[tData].id+")'> View</a></td>";
             tableData+= "<td> <a href = '#' onclick = 'updateLesson("+responseObj[tData].id+", \""+responseObj[tData].name+"\", \""+responseObj[tData].description+"\" )'> Edit</a></td>";
-            tableData+= "<td> <a href = '#'> Delete</a></td></tr>";
+            tableData+= "<td> <a href = '#' onclick ='deleteLesson("+responseObj[tData].id+", \""+responseObj[tData].name+"\" )'> Delete</a></td></tr>";
 
         }
         tableData+="</table>";
@@ -144,8 +144,8 @@
         document.getElementById("allLessons").style.display="block";
         document.getElementById("updateForm").style.display="none";
     }
-     function submitNewLesson() 
-     {
+    function submitNewLesson() 
+    {
         //get lesson
         var lessonName = document.forms["updateForm1"]["lessonName"].value;
         var lessonDescription = document.forms["updateForm1"]["lessonDescription"].value;
@@ -154,14 +154,30 @@
         //validate
         if((lessonName != "") && (lessonDescription != ""))
         {
-            createObject(getLessons, methods[1], baseUrl +" updateLesson"); 
+            createObject(getLessons, methods[1], baseUrl +"updateLesson"); 
         }
         else
         {
             alert("invalid input");
         }
+        
+    }
+    function deleteLesson(id, name)
+    {   var text;
+        if(confirm( "Do you want to delete a lesson?"))
+        {
+            text = "You are pressed ok";
+            createObject(getLessons, methods[0], baseUrl +"deleteLesson/"+id); 
+            
+        }
+        else
+        {
+            text = "You are pressed cancel"
+        }
         return false;
-     }
+        
+    }
+
 
 </script>
 </body>
