@@ -10,32 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('show_lessons');
-});
-
-Route::get('/saveLesson', function () {
-    
-});
-Route::get('/updateLesson', function () {
-    
-});
-Route::get('/deleteLesson/{id}', function ($id) {
-   DB::table("lesson")->where('id', $id)->delete();
-   $lesson = DB::table("lesson")->get();
-   echo $lesson;
-});
-
-
-Route::get('/getLesson', function () {
-    $lesson = DB::table("lesson")->get();
-    echo $lesson;
-});
-
-Route::get('/getSingleLesson/{lesson}', function ($id) {
-    $lesson = DB::table("lesson")->find($id);
-    echo  json_encode($lesson);
-});
-
+Route::get('/', 'LessonsController@index');
+Route::get('/saveLesson','LessonsController@save');
+Route::get('/updateLesson', 'LessonsController@update');
+Route::get('/getLesson', 'LessonsController@get');
+Route::get('/deleteLesson/{lesson}', 'LessonsController@delete');
+Route::get('/getSingleLesson/{lesson}', 'LessonsController@getSingle');
 
