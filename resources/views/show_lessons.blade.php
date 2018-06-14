@@ -1,44 +1,58 @@
 @extends("layouts.master")
 @section("content")
 <div id="inputForm" >
-	<form action="#" method="POST"  id="saveLesson" name="lessonsForm">
+	<form action="#" method="POST"  id="saveLesson" name="lessonsForm" >
+		@csrf
 		<div class="inputItems">
 			<label> Lesson Name:</label>
-			<input class= "form-control" type="text" name="lessonName">
+			<input class= "form-control" type="text" name="lessonName" required>
 		</div>
 		<div class="inputItems">
 			<label> Lesson Description:</label>
-			<textarea class= "form-control" name="lessonDescription"></textarea>
+			<textarea class= "form-control" name="lessonDescription" required></textarea>
 		</div>
 		<div  class="inputButton">
 			<button  class="btn btn-warning " type="button" onclick="hideInputForm()" > Cancel</button>
-			<button   class="btn btn-primary "type="submit" >Add Lesson</button>
+			<button   class="btn btn-primary "type="submit">Add Lesson</button>
 		</div>
 	</form>
 </div>
+
 <div id ="allLessons"></div>
+
 <div id ="updateForm">
-	<form  class = "form-horizontal"action="#" method="POST"  id="saveLesson" name="updateForm1">
+	<form  class = "form-horizontal" action="#" method="POST"  id="updateLesson" name="updateForm1" >
+
+	@csrf
+
+	<div class="inputItems">
+			<input class= "form-control" type="hidden" name="lessonId" required>
+		</div>
+
 		<div class="inputItems">
 			<label> Lesson Name:</label>
-			<input class= "form-control" type="text" name="lessonName">
+			<input class= "form-control" type="text" name="lessonName" required>
 		</div>
+
 		<div class="inputItems">
 			<label> Lesson Description:</label>
-			<textarea  class= "form-control" name="lessonDescription"></textarea>
+			<textarea  class= "form-control" name="lessonDescription" required></textarea>
 		</div>
+
 		<div  class="inputButton">
 			<button class="btn btn-warning " type="button" onclick="hideInputForm()" > Cancel</button>
-			<button  class="btn btn-primary " type="submit"  onclick ="submitNewLesson()">Add Lesson</button>
+			<button  class="btn btn-primary " type="submit" >Update Lesson</button>
 		</div>
+
 	</form>
 </div>
 <script type="text/javascript">
 	var methods = ["GET", "POST"];
 	var baseUrl = "http://localhost:8000/";
 	
-	function createObject(readyStateFunction, requestMethod, requestUrl,  )
+	function createObject(readyStateFunction, requestMethod, requestUrl, sendData=null )
 	{
+
 	    var obj = new  XMLHttpRequest();
 	    obj.onreadystatechange = function() 
 	    {
@@ -47,8 +61,19 @@
 	            readyStateFunction(this.responseText);
 	        }
 	    };
+
 	    obj.open(requestMethod, requestUrl, true )
-	    obj.send();
+			if(requestMethod=='POST')
+			{
+				obj.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				obj.setRequestHeader("X-CSRF-token",  document.querySelector('meta[name = "csrf-token"]').getAttribute('content'));    
+				obj.send(sendData);
+			}
+			else
+			{
+				obj.send();
+			}
+	 
 	}
 	
 	function displayLessons(jsonResponse)
@@ -57,7 +82,7 @@
 	    var responseObj = JSON.parse(jsonResponse);
 	    var tData, count=0; 
 	    // var '<button type = 'button' onclick='showInputForm()> show Lesson</button>';
-	    var tableData ="<button  class= 'btn btn-primary' type = 'button' onclick='showInputForm()'> show Lesson</button><table class ='table table-bordered table-striped table-condensed'><tr> <th>ID</th><th>Name</th><th>Description</th><th  colspan ='3'>Action</th></tr>";
+	    var tableData ="<button  class= 'btn btn-primary' type = 'button' onclick='showInputForm()'> Add Lesson</button><table class ='table table-bordered table-striped table-condensed'><tr> <th>ID</th><th>Name</th><th>Description</th><th  colspan ='3'>Action</th></tr>";
 	    for(tData in responseObj)
 	    {
 	        count++;
@@ -78,32 +103,32 @@
 	    createObject(displayLessons, methods[0], baseUrl + "getLesson");
 	    document.getElementById("inputForm").style.display="none";
 	    document.getElementById("updateForm").style.display="none";
+		document.getElementById("allLessons").style.display="block";
 	    
 	}
 	
-	function submitLesson()
-	{   //get lesson
-	        var lessonName = document.forms["lessonsForm"]["lessonName"].value;
-	        var lessonDescription = document.forms["lessonsForm"]["lessonDescription"].value;
-	
-	        // alert(lessonName+lessonDescription);
+	function submitLesson(e)
+	{   //get lessonault 
+		e.preventDefault();
+		var lessonName = document.forms["lessonsForm"]["lessonName"].value;
+		var lessonDescription = document.forms["lessonsForm"]["lessonDescription"].value;
+
+		// alert(lessonName+lessonDescription);
 	    //validate
 	    if((lessonName != "") && (lessonDescription != ""))
 	    {
-	        createObject(getLessons, methods[1], baseUrl +" saveLesson"); 
+			var sendData = "name="+lessonName+"&description=" +lessonDescription;
+			console.log(sendData);
+	        createObject(getLessons, methods[1], baseUrl+ "saveLesson", sendData);
 	    }
-	    else
-	    {
-	        // alert("invalid input");
-	    }
-	    //send to server
-	    document.getElementById("saveLesson").addEventListener("submit", submitLesson);
 	}
+
 	function showLesson(id)
 	{
-	    createObject(displaySingleLesson, methods[0], baseUrl +"getSingleLesson/"+id); 
+	    createObject(displaySingleLesson, methods[0], baseUrl+"getSingleLesson/"+id); 
 	    return false;
 	}
+
 	function updateLesson(id, name, description)
 	{
 	    document.getElementById("updateForm").style.display="block";
@@ -111,6 +136,19 @@
 	    //get updatelesson
 	    document.forms["updateForm1"]["lessonName"].value = name;
 	    document.forms["updateForm1"]["lessonDescription"].value = description;
+		document.forms["updateForm1"]["lessonId"].value = id;
+	}
+
+	function updateLesson2(e)
+	{
+		e.preventDefault();
+		var lessonName = document.forms["updateForm1"]["lessonName"].value;
+	    var lessonDescription = document.forms["updateForm1"]["lessonDescription"].value;
+		var lessonId = document.forms["updateForm1"]["lessonId"].value;
+
+		var sendData = "name="+lessonName+"&description=" +lessonDescription+"&id=" +lessonId;
+			console.log(sendData);
+	        createObject(getLessons, methods[1], baseUrl+"updateLesson", sendData); 
 	}
 	
 	function displaySingleLesson(jsonResponse)
@@ -136,6 +174,7 @@
 	}
 	function submitNewLesson() 
 	{
+		
 	    //get lesson
 	    var lessonName = document.forms["updateForm1"]["lessonName"].value;
 	    var lessonDescription = document.forms["updateForm1"]["lessonDescription"].value;
@@ -154,20 +193,23 @@
 	}
 	function deleteLesson(id, name)
 	{   var text;
-	    if(confirm( "Do you want to delete a lesson?"))
+	    if(confirm( "Do you want to delete" + " "+name + "?"))
 	    {
 	        text = "You are pressed ok";
 	        createObject(getLessons, methods[0], baseUrl +"deleteLesson/"+id); 
-	        
+	        alert("You have deleted" + " "+name );
 	    }
 	    else
 	    {
 	        text = "You are pressed cancel"
 	    }
 	    return false;
+
+	
 	    
 	}
-	
+	document.getElementById("saveLesson").addEventListener("submit", submitLesson);
+	document.getElementById("updateLesson").addEventListener("submit", updateLesson2);
 	
 </script>
 @endsection

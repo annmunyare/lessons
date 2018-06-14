@@ -10,11 +10,27 @@ class LessonsController extends Controller
     public function index(){
         return view('show_lessons');
     }
-    public function save(){
+
+    public function save(Request $request){
+    
+        $this->validate($request,[
+            'name'=>'required',
+            'description'=>'required'
+        ]);
+       
+        $lesson = new Lesson;
+        $lesson ->name = $request->name;
+        $lesson->description =  $request->description;
+        $lesson->save();
    
     }
-    public function update(){
-   
+
+    public function update(Request $request){
+        $id = $request->id;
+        $lesson = Lesson::findOrFail($id);
+        $lesson->name = $request->name;
+        $lesson->description = $request->description;
+        $lesson->save();
     }
     public function get(){
         $lesson = Lesson::all();

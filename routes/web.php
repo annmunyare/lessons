@@ -11,8 +11,8 @@
 |
 */
 Route::get('/', 'LessonsController@index');
-Route::get('/saveLesson','LessonsController@save');
-Route::get('/updateLesson', 'LessonsController@update');
+Route::post('/saveLesson','LessonsController@save');
+Route::post('/updateLesson', 'LessonsController@update');
 Route::get('/getLesson', 'LessonsController@get');
 Route::get('/deleteLesson/{lesson}', 'LessonsController@delete');
 Route::get('/getSingleLesson/{lesson}', 'LessonsController@getSingle');

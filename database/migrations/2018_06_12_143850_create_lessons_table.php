@@ -12,7 +12,9 @@ class CreateLessonsTable extends Migration
      * @return void
      */
     public function up()
+
     {
+        
         Schema::create('lessons', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
