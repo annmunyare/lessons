@@ -16,4 +16,5 @@ Route::post('/updateLesson', 'LessonsController@update');
 Route::get('/getLesson', 'LessonsController@get');
 Route::get('/deleteLesson/{lesson}', 'LessonsController@delete');
 Route::get('/getSingleLesson/{lesson}', 'LessonsController@getSingle');
+Route::get('/getUnits/{lesson}', 'UnitsController@show');
 

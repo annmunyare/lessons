@@ -82,7 +82,7 @@
 	    var responseObj = JSON.parse(jsonResponse);
 	    var tData, count=0; 
 	    // var '<button type = 'button' onclick='showInputForm()> show Lesson</button>';
-	    var tableData ="<button  class= 'btn btn-primary' type = 'button' onclick='showInputForm()'> Add Lesson</button><table class ='table table-bordered table-striped table-condensed'><tr> <th>ID</th><th>Name</th><th>Description</th><th  colspan ='3'>Action</th></tr>";
+	    var tableData ="<button  class= 'btn btn-primary' type = 'button' onclick='showInputForm()'> Add Lesson</button><table class ='table table-bordered table-striped table-condensed'><tr> <th>ID</th><th>Name</th><th>Description</th><th  colspan ='4'>Action</th></tr>";
 	    for(tData in responseObj)
 	    {
 	        count++;
@@ -91,8 +91,9 @@
 	        tableData+= "<td>" + responseObj[tData].description +"</td>";
 	        tableData+= "<td> <a href = '#' class= 'btn btn-info btn-sm' onclick ='showLesson("+responseObj[tData].id+")'> View</a></td>";
 	        tableData+= "<td> <a href = '#' class= 'btn btn-success btn-sm' onclick = 'updateLesson("+responseObj[tData].id+", \""+responseObj[tData].name+"\", \""+responseObj[tData].description+"\" )'> Edit</a></td>";
-	        tableData+= "<td> <a href = '#' class= 'btn btn-danger btn-sm' onclick ='deleteLesson("+responseObj[tData].id+", \""+responseObj[tData].name+"\" )'> Delete</a></td></tr>";
-	
+	        tableData+= "<td> <a href = '#' class= 'btn btn-danger btn-sm' onclick ='deleteLesson("+responseObj[tData].id+", \""+responseObj[tData].name+"\" )'> Delete</a></td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-info btn-sm' onclick ='viewUnits("+responseObj[tData].id+")'>Units</a></td> </tr>";
+
 	    }
 	    tableData+="</table>";
 	    document.getElementById("allLessons").innerHTML= tableData;
@@ -207,6 +208,31 @@
 
 	
 	    
+	}
+	function viewLessonUnit(jsonResponse)
+	{
+		var responseObj = JSON.parse(jsonResponse);
+	    var tData, count=0; 
+	  	var tableData ="<table class ='table table-bordered table-striped table-condensed'><tr> <th>ID</th><th>Name</th><th>Hours</th><th  colspan ='4'>Action</th></tr>";
+	    for(tData in responseObj)
+	    {
+	        // count++;
+	        // tableData+= "<tr><td>" + count +"</td>";
+	        tableData+= "<tr><td>" + responseObj[tData].name +"</td>";
+	        tableData+= "<td>" + responseObj[tData].hours +"</td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-info btn-sm' onclick ='showLesson("+responseObj[tData].id+")'> View</a></td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-success btn-sm' onclick = 'updateLesson("+responseObj[tData].id+", \""+responseObj[tData].name+"\", \""+responseObj[tData].description+"\" )'> Edit</a></td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-danger btn-sm' onclick ='deleteLesson("+responseObj[tData].id+", \""+responseObj[tData].name+"\" )'> Delete</a></td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-info btn-sm' onclick ='getLessons("+responseObj[tData].id+")'>Back</a></td> </tr>";
+
+	    }
+	    tableData+="</table>";
+	    document.getElementById("allLessons").innerHTML= tableData;
+	}
+
+	function viewUnits(lesson_id)
+	{
+		createObject(viewLessonUnit, methods[0], baseUrl + "getUnits/"+lesson_id);
 	}
 	document.getElementById("saveLesson").addEventListener("submit", submitLesson);
 	document.getElementById("updateLesson").addEventListener("submit", updateLesson2);
