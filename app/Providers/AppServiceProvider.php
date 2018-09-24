@@ -14,6 +14,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        view()->composer('layouts.jumbotron', function($view){
+            $view->with('archives', \App\Comment::archives());
+
+        });
     }
 
     /**

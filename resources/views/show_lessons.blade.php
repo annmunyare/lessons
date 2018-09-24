@@ -19,6 +19,7 @@
 </div>
 
 <div id ="allLessons"></div>
+<div id ="archives"></div>
 
 <div id ="updateForm">
 	<form  class = "form-horizontal" action="#" method="POST"  id="updateLesson" name="updateForm1" >
@@ -220,7 +221,7 @@
 	        // tableData+= "<tr><td>" + count +"</td>";
 	        tableData+= "<tr><td>" + responseObj[tData].name +"</td>";
 	        tableData+= "<td>" + responseObj[tData].hours +"</td>";
-	        tableData+= "<td> <a href = '#' class= 'btn btn-info btn-sm' onclick ='showLesson("+responseObj[tData].id+")'> View</a></td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-info btn-sm' onclick ='viewLecturer("+responseObj[tData].units_id+")'> Lecturer</a></td>";
 	        tableData+= "<td> <a href = '#' class= 'btn btn-success btn-sm' onclick = 'updateLesson("+responseObj[tData].id+", \""+responseObj[tData].name+"\", \""+responseObj[tData].description+"\" )'> Edit</a></td>";
 	        tableData+= "<td> <a href = '#' class= 'btn btn-danger btn-sm' onclick ='deleteLesson("+responseObj[tData].id+", \""+responseObj[tData].name+"\" )'> Delete</a></td>";
 	        tableData+= "<td> <a href = '#' class= 'btn btn-info btn-sm' onclick ='getLessons("+responseObj[tData].id+")'>Back</a></td> </tr>";
@@ -233,6 +234,31 @@
 	function viewUnits(lesson_id)
 	{
 		createObject(viewLessonUnit, methods[0], baseUrl + "getUnits/"+lesson_id);
+	}
+
+	function viewLecturer(lecturer_id)
+	{
+		createObject(viewLecturer2, methods[0], baseUrl + "getLecturer/"+lecturer_id);
+	}
+
+	function viewLecturer2(jsonResponse)
+	{
+		var responseObj = JSON.parse(jsonResponse);
+	    var tData, count=0; 
+	  	var tableData ="<table class ='table table-bordered table-striped table-condensed'><tr> <th>ID</th><th>Name</th><th>Hours</th><th  colspan ='4'>Action</th></tr>";
+
+	        // count++;
+	        // tableData+= "<tr><td>" + count +"</td>";
+	        tableData+= "<tr><td>" + responseObj.lecturer_name +"</td>";
+	        tableData+= "<td>" + responseObj.telephone +"</td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-info btn-sm' onclick ='viewLecturer("+responseObj.id+")'> Lecturer</a></td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-success btn-sm' onclick = 'updateLesson("+responseObj.id+", \""+responseObj.name+"\", \""+responseObj.description+"\" )'> Edit</a></td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-danger btn-sm' onclick ='deleteLesson("+responseObj.id+", \""+responseObj.name+"\" )'> Delete</a></td>";
+	        tableData+= "<td> <a href = '#' class= 'btn btn-info btn-sm' onclick ='getLessons("+responseObj.id+")'>Back</a></td> </tr>";
+
+	  
+	    tableData+="</table>";
+	    document.getElementById("allLessons").innerHTML= tableData;
 	}
 	document.getElementById("saveLesson").addEventListener("submit", submitLesson);
 	document.getElementById("updateLesson").addEventListener("submit", updateLesson2);

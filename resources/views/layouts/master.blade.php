@@ -12,6 +12,7 @@
 	</head>
 	<body onload="getLessons()">
 		@include("layouts.nav")
+		@include("layouts.jumbotron")
 		
         <div class = "container">
              @yield('content')

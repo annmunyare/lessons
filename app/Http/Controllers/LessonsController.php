@@ -7,8 +7,13 @@ use App\Lesson;
 
 class LessonsController extends Controller
 {
+
+
+
     public function index(){
+        $archives= Lesson::archives();
         return view('show_lessons');
+        // return view('show_lessons', compact('archives'));
     }
 
     public function save(Request $request){

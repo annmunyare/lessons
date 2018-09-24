@@ -11,5 +11,6 @@ class Lesson extends Model
     {
         return $this->hasMany('App\Unit');
     }
+   
 }
 

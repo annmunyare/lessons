@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Unit extends Model
 {
     //
@@ -15,4 +16,12 @@ class Unit extends Model
         'App\Lesson'
         );
     }
+
+
+    public function lecturer()
+    {
+        return $this->belongsTo(Lecturer::class, 'lecturer_id');
+    }
+
+
 }
